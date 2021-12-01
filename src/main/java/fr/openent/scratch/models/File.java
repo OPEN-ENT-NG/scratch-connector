@@ -1,17 +1,13 @@
 package fr.openent.scratch.models;
 
 import fr.openent.scratch.helper.DateHelper;
-import fr.openent.scratch.utils.ScratchType;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
 
 public class File {
-    private static final Logger log = LoggerFactory.getLogger(File.class);
 
     public String id;
     public String name;
-    public String path;
+    public String extension;
     public String last_modified;
     public String created;
     public String type;
@@ -20,13 +16,12 @@ public class File {
     public boolean writable;
 
     public File(JsonObject document) {
-        String mimetype = document.getJsonObject("metadata").getString("content-type");
-
         this.id = document.getString("_id");
         this.name = document.getString("name");
         this.type = "file";
         this.format = "base64";
-        this.mimetype = mimetype;
+        this.extension = "sb3";
+        this.mimetype = "application/octet-stream";
         this.writable = true;
         this.last_modified = DateHelper.tryFormat(document.getString("modified"));
         this.created = DateHelper.tryFormat(document.getString("created"));

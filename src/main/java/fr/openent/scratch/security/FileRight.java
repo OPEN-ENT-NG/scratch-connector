@@ -7,10 +7,12 @@ import org.entcore.common.http.filter.ResourcesProvider;
 import org.entcore.common.user.UserInfos;
 
 
-public class AccessRight implements ResourcesProvider {
+public class FileRight implements ResourcesProvider {
     @Override
     public void authorize(HttpServerRequest resourceRequest, Binding binding, UserInfos user, Handler<Boolean> handler) {
-        handler.handle(true);
-//        handler.handle(WorkflowActionUtils.hasRight(user, WorkflowActions.ACCESS_RIGHT.toString()));
+        Boolean hasRight = false;
+        // requete mongo pour check si user est bien proprietaire du fichier
+
+        handler.handle(hasRight);
     }
 }

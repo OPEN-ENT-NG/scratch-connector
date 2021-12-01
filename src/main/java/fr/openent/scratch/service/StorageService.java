@@ -12,12 +12,4 @@ public interface StorageService {
      * @param handler   Function handler returning data
      */
     void add(JsonObject body, Handler<Either<String, JsonObject>> handler);
-
-    /**
-     * Remove file in file system
-     *
-     * @param storageId Id of the file to remove
-     * @param handler   Function handler returning data
-     */
-    void remove(String storageId, Handler<Either<String, JsonObject>> handler);
 }
