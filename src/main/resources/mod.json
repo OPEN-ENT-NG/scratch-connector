@@ -1,0 +1,11 @@
+{
+	"main" : "fr.openent.scratch.Scratch",
+	"port" : 8072,
+	"app-name" : "Scratch",
+	"app-address" : "/scratch",
+	"app-icon" : "scratch-connector-large",
+	"app-displayName" : "Scratch",
+	"mode": "dev",
+	"entcore.port" : 8009,
+	"auto-redeploy": false
+}

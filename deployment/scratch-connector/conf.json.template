@@ -1,0 +1,18 @@
+{
+  "name": "fr.openent~scratch-connector~0.1-SNAPSHOT",
+  "config": {
+    "main" : "fr.openent.scratch.Scratch",
+    "port" : 8072,
+    "app-name" : "Scratch",
+    "app-address" : "/scratch",
+    "app-icon" : "Scratch-connector-large",
+    "host": "${host}",
+    "ssl" : $ssl,
+    "auto-redeploy": false,
+    "userbook-host": "${host}",
+    "integration-mode" : "HTTP",
+    "app-registry.port" : 8012,
+    "mode" : "${mode}",
+    "entcore.port" : 8009
+  }
+}
