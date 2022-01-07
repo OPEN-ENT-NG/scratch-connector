@@ -60,7 +60,7 @@ public interface SessionService {
      * @param documentName  new Session id
      * @param handler       Function handler returning data
      */
-    void updateFileInfos(String id, String fileId, String documentName, String newSessionId,
+    void updateFileInfos(String id, String fileId, String entId, String documentName, String newSessionId, Boolean canUpdate,
                          Handler<Either<String, JsonObject>> handler);
 
 

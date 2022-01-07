@@ -85,17 +85,28 @@ public class DefaultSessionService implements SessionService {
     }
 
     @Override
-    public void updateFileInfos(String id, String fileId, String documentName, String newSessionId,
+    public void updateFileInfos(String id, String fileId, String entId, String documentName, String newSessionId, Boolean canUpdate,
                                 Handler<Either<String, JsonObject>> handler) {
         JsonArray params;
 
         String query = "" +
                 "UPDATE " + Scratch.scratchSchema + ".sessions " +
-                "SET fileid = ?, documentname = ?, sessionid = ? WHERE id = ?;";
+                "SET fileid = ?, documentname = ?, sessionid = ? ";
+        if(entId != null && canUpdate != null){
+            query += ", entid = ?, canupdate = ? ";
+        }
+
+        query += "WHERE id = ?;";
 
         params = new fr.wseduc.webutils.collections.JsonArray();
 
-        params.add(fileId).add(documentName).add(newSessionId).add(id);
+        params.add(fileId).add(documentName).add(newSessionId);
+
+        if(entId != null && canUpdate != null){
+            params.add(entId).add(canUpdate);
+        }
+
+        params.add(id);
 
         Sql.getInstance().prepared(query, params, SqlResult.validUniqueResultHandler(handler));
     }

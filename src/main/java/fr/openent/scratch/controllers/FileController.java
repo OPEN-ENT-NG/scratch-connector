@@ -88,8 +88,6 @@ public class FileController extends ControllerHelper {
                                             JsonObject userJson = (JsonObject) userShared;
                                             if (userJson.getString("userId").equals(userId)) {
                                                 isShared = true;
-                                                canUpdate = userJson.containsKey("org-entcore-workspace-controllers-WorkspaceController|updateDocument") &&
-                                                        userJson.getBoolean("org-entcore-workspace-controllers-WorkspaceController|updateDocument");
                                             }
                                         }
                                         if (!isShared) {
@@ -261,6 +259,7 @@ public class FileController extends ControllerHelper {
                     JsonObject res = event.right().getValue();
                     String sessionId = res.getString("sessionid","");
                     boolean canUpdate = res.getBoolean("canupdate",false);
+                    final String userId = res.getString("userid","");
                     //if sessionid not defined already
                     if (sessionId.equals(old_session_id)) {
                         if(canUpdate) {
@@ -277,9 +276,8 @@ public class FileController extends ControllerHelper {
                                                         JsonObject file = new File(document).toJson();
                                                         String fileid = document.getString("file");
                                                         String documentName = document.getString("name");
-                                                        sessionService.updateFileInfos(id, fileid, documentName, new_session_id, update -> {
-                                                            renderJson(request, file);
-                                                        });
+                                                        sessionService.updateFileInfos(id, fileid, null, documentName,
+                                                                new_session_id, null, update -> renderJson(request, file));
                                                     } else {
                                                         badRequest(request, "[Scratch@getFile] No document found for entId : " + entId);
                                                     }
@@ -302,13 +300,67 @@ public class FileController extends ControllerHelper {
                                 }
                             });
                         } else {
-                            unauthorized(request, "[Scratch@updateFile] Unauthorized updating : the user doesn't have the right to update the file");
+                            //In case when the user wants to save a sharing file in his personal workspace
+                            UserUtils.getUserInfos(eb, userId, user -> {
+                                if (user == null) {
+                                    unauthorized(request, "[Scratch@createFile] Unauthorized access : cannot fin the user");
+                                    return;
+                                }
+                                storageService.add(body, addFileEvent -> {
+                                    if (addFileEvent.isRight()) {
+                                        JsonObject storageEntries = addFileEvent.right().getValue();
+                                        String name = body.getString("name");
+                                        String application = config.getString("app-name");
+                                        workspaceHelper.addDocument(storageEntries, user, name, application,
+                                                false, null, createEvent -> {
+                                            if (createEvent.succeeded()) {
+                                                JsonObject doc = createEvent.result().body();
+                                                JsonObject file = new File(doc).toJson();
+
+                                                sessionService.updateFileInfos(id, doc.getString("file"),
+                                                        doc.getString("_id"), name, new_session_id, true, eventAdding -> {
+                                                            if (eventAdding.isRight()) {
+                                                                String parentId = body.getString("parent_id");
+                                                                // If parent is base directory there's no need to move the document
+                                                                if (parentId == null || parentId.isEmpty()) {
+                                                                    renderJson(request, file);
+                                                                    eventStore.createAndStoreEvent(Scratch.ScratchEvent.CREATE.name(), request);
+                                                                } else {
+                                                                    workspaceHelper.moveDocument(file.getString("id"), parentId, user, moveEvent -> {
+                                                                        if (moveEvent.succeeded()) {
+                                                                            renderJson(request, file);
+                                                                            eventStore.createAndStoreEvent(Scratch.ScratchEvent.CREATE.name(), request);
+                                                                        } else {
+                                                                            badRequest(request,
+                                                                                    "[Scratch@createFile] Failed to move a workspace document : " +
+                                                                                            moveEvent.cause().getMessage());
+                                                                        }
+                                                                    });
+                                                                }
+                                                            } else {
+                                                                badRequest(request,
+                                                                        "[Scratch@createFile] Failed to adding all session Infos : " +
+                                                                                eventAdding.left());
+                                                            }
+                                                        });
+                                            } else {
+                                                badRequest(request,
+                                                        "[Scratch@createFile] Failed to create a workspace document : " +
+                                                                createEvent.cause().getMessage());
+                                            }
+                                        });
+                                    } else {
+                                        badRequest(request, "[Scratch@createFile] Failed to create a new entry in the storage");
+                                    }
+                                });
+                            });
                         }
                     } else {
                         unauthorized(request, "[Scratch@updateFile] Unauthorized updating : sessionid not match");
                     }
                 } else {
-                    badRequest(request, "[Scratch@getFile] problem to get infos of the session in database : " + event.left().toString());
+                    badRequest(request, "[Scratch@getFile] problem to get infos of the session in database : " +
+                            event.left().toString());
                 }
             });
         });
