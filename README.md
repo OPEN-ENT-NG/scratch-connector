@@ -29,3 +29,5 @@ scratchCron = ${String}
 scratchSessionDuration = Integer
 </pre>
 
+scratchCron => Cron de suppression des anciennes sessions (avec un scratchSessionDuration dépassé, par déaut '1 DAY') des utilisateurs de scratch. 
+(par défaut passe tous les 10 minutes)
