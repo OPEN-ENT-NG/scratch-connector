@@ -1,5 +1,5 @@
 {
-  "name": "fr.openent~scratch-connector~0.2.3",
+  "name": "fr.openent~scratch-connector~0.2-SNAPSHOT",
   "config": {
     "main" : "fr.openent.scratch.Scratch",
     "port" : 8072,
