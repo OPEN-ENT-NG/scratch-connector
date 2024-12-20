@@ -3,6 +3,7 @@ package fr.openent.scratch;
 import fr.openent.scratch.controllers.FileController;
 import fr.openent.scratch.cron.ScratchCron;
 import fr.wseduc.cron.CronTrigger;
+import io.vertx.core.Promise;
 import io.vertx.core.eventbus.EventBus;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
@@ -22,8 +23,8 @@ public class Scratch extends BaseServer {
 	public enum ScratchEvent { ACCESS, CREATE }
 
 	@Override
-	public void start() throws Exception {
-		super.start();
+	public void start(Promise<Void> startPromise) throws Exception {
+		super.start(startPromise);
 
 		scratchSchema = config.getString("db-schema");
 		scratchURL = config.getString("scratch-url");
@@ -38,5 +39,7 @@ public class Scratch extends BaseServer {
 		// cron
 		ScratchCron scratchCron = new ScratchCron();
 		new CronTrigger(vertx, config.getString("scratch-cron", "0 */10 * * * ? *")).schedule(scratchCron);
+		startPromise.tryComplete();
+		startPromise.tryFail("[Geogebra@Geogebra::start] Fail to start Geogebra");
 	}
 }
