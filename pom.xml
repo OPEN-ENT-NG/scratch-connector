@@ -12,7 +12,7 @@
 
     <groupId>fr.openent</groupId>
     <artifactId>scratch-connector</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.1</version>
 
     <scm>
         <connection>scm:git:https://github.com/OPEN-ENT-NG/scratch-connector.git</connection>
@@ -31,8 +31,8 @@
     <properties>
         <toolsVersion>2.0.0-final</toolsVersion>
         <junitVersion>5.1.0</junitVersion>
-        <vertxCronTimerVersion>3.0-SNAPSHOT</vertxCronTimerVersion>
-        <entCoreVersion>6.5-SNAPSHOT</entCoreVersion>
+        <vertxCronTimerVersion>3.0.0</vertxCronTimerVersion>
+        <entCoreVersion>6.6.0</entCoreVersion>
     </properties>
 
 
