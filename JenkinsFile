@@ -15,7 +15,7 @@ pipeline {
         steps {
           checkout scm
           sh 'chmod +x ./build.sh'
-          sh './build.sh clean install publish'
+          sh './build.sh init clean install publish'
         }
       }
     }
