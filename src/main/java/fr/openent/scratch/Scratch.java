@@ -1,6 +1,7 @@
 package fr.openent.scratch;
 
 import fr.openent.scratch.controllers.FileController;
+import fr.openent.scratch.controllers.TaskController;
 import fr.openent.scratch.cron.ScratchCron;
 import fr.wseduc.cron.CronTrigger;
 import io.vertx.core.Future;
@@ -54,6 +55,9 @@ public class Scratch extends BaseServer {
 
 			// cron
 			ScratchCron scratchCron = new ScratchCron();
+			// Enable the cron task to be triggered via API
+			addController(new TaskController(scratchCron));
+			// Schedule the cron task to run as configured
             try {
                 new CronTrigger(vertx, config.getString("scratch-cron", "0 */10 * * * ? *")).schedule(scratchCron);
             } catch (ParseException e) {
