@@ -2,6 +2,8 @@ package fr.openent.scratch.controllers;
 
 import fr.openent.scratch.cron.ScratchCron;
 import fr.wseduc.rs.Post;
+import fr.wseduc.security.ActionType;
+import fr.wseduc.security.SecuredAction;
 import fr.wseduc.webutils.http.BaseController;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.impl.logging.Logger;
@@ -17,6 +19,7 @@ public class TaskController extends BaseController {
 	}
 
 	@Post("api/internal/scratch-cron")
+	@SecuredAction(value = "", type = ActionType.RESOURCE)
 	public void runScratchCron(HttpServerRequest request) {
 		log.info("Triggered scratch task");
 		scratchCron.handle(0L);
