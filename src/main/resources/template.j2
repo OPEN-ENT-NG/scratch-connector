@@ -2,6 +2,11 @@
   "name": "fr.openent~scratch-connector",
   "config": {
     "main" : "fr.openent.scratch.Scratch",
+    "probes": [
+      "org.entcore.common.http.health.Neo4jProbe",
+      "org.entcore.common.http.health.MongoProbe",
+      "org.entcore.common.http.health.PostgresProbe"
+    ],
     "port" : 8072,
     "app-name" : "Scratch",
     "app-address" : "/scratch",
