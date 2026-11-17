@@ -11,7 +11,7 @@
   </parent>
   <groupId>fr.openent</groupId>
   <artifactId>scratch-connector</artifactId>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.2-agilite-SNAPSHOT</version>
   <scm>
     <connection>scm:git:https://github.com/OPEN-ENT-NG/scratch-connector.git</connection>
     <developerConnection>scm:git:https://github.com/OPEN-ENT-NG/scratch-connector.git</developerConnection>
@@ -28,11 +28,11 @@
     <toolsVersion>2.0.0-final</toolsVersion>
     <junitVersion>5.1.0</junitVersion>
     <vertxCronTimerVersion>3.0-SNAPSHOT</vertxCronTimerVersion>
-    <entCoreVersion>6.17-SNAPSHOT</entCoreVersion>
+    <entCoreVersion>6.18-feeder-it-SNAPSHOT</entCoreVersion>
     <modMongoVersion>4.2-SNAPSHOT</modMongoVersion>
     <modPostgresVersion>2.2-SNAPSHOT</modPostgresVersion>
     <modJsonSchemaValidatorVersion>2.2-SNAPSHOT</modJsonSchemaValidatorVersion>
-    <entCoreLibsVersion>6.16-SNAPSHOT</entCoreLibsVersion>
+    <entCoreLibsVersion>6.16-agilite-SNAPSHOT</entCoreLibsVersion>
   </properties>
   <dependencies>
     <dependency>
